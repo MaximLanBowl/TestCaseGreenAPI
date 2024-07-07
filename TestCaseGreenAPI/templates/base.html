@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>GREEN-API</title>
+</head>
+<body>
+    <h1>GREEN-API</h1>
+    <form id="form">
+        <label for="idInstance">idInstance:</label>
+        <input type="text" id="idInstance" name="idInstance"><br><br>
+        <label for="apiTokenInstance">ApiTokenInstance:</label>
+        <input type="text" id="apiTokenInstance" name="apiTokenInstance"><br><br>
+        <label for="phoneNumber">Phone Number:</label>
+        <input type="text" id="phoneNumber" name="phoneNumber"><br><br>
+        <label for="message">Message:</label>
+        <textarea id="message" name="message"></textarea><br><br>
+        <button type="button" onclick="getSettings()">getSettings</button>
+        <button type="button" onclick="sendMessage()">sendMessage</button><br><br>
+    </form>
+    <div id="response"></div>
+
+    <script>
+        function getSettings() {
+            var idInstance = document.getElementById("idInstance").value;
+            var apiTokenInstance = document.getElementById("apiTokenInstance").value;
+
+            fetch('/getSettings', {
+                method: 'POST',
+                body: new URLSearchParams({
+                    idInstance: idInstance,
+                    apiTokenInstance: apiTokenInstance
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById("response").innerHTML = JSON.stringify(data, null, 2);
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+        }
+
+        function sendMessage() {
+            var idInstance = document.getElementById("idInstance").value;
+            var apiTokenInstance = document.getElementById("apiTokenInstance").value;
+            var phoneNumber = document.getElementById("phoneNumber").value;
+            var message = document.getElementById("message").value;
+
+            fetch('/sendMessage', {
+                method: 'POST',
+                body: new URLSearchParams({
+                    idInstance: idInstance,
+                    apiTokenInstance: apiTokenInstance,
+                    phoneNumber: phoneNumber,
+                    message: message
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById("response").innerHTML = JSON.stringify(data, null, 2);
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+        }
+    </script>
+</body>
+</html>
